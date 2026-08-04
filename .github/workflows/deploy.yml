@@ -4,11 +4,13 @@ on:
   push:
     branches: ['main']
 
+# Berikan izin (permissions) yang dibutuhkan oleh GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Batasi agar hanya ada satu deployment yang berjalan dalam satu waktu
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -23,7 +25,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -32,11 +34,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build project
         run: npm run build
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -46,15 +45,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-        path: './dist'
-
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
